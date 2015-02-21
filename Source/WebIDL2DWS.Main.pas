@@ -17,9 +17,13 @@ uses
   (* Indy *)
   IdComponent,
 
+  (* Virtual TreeView
+  VirtualTrees,
+
   (* DWS *)
   dwsTokenizer, dwsErrors, dwsWebIDL, dwsWebIDLTokenizer,
 
+  (* Custom *)
   WebIDL2DWS.SpecifyURL;
 
 type
@@ -54,10 +58,23 @@ type
     constructor Create(SourceHTML: string);
   end;
 
+  TTreeMessage = record
+    Text: string;
+    Line, Col: Integer;
+  end;
+  PTreeMessage = ^TTreeMessage;
+
   TFormWebIDL = class(TForm)
+    ActionEditCopy: TEditCopy;
+    ActionEditCut: TEditCut;
+    ActionEditDelete: TEditDelete;
+    ActionEditPaste: TEditPaste;
+    ActionEditSelectAll: TEditSelectAll;
+    ActionEditUndo: TEditUndo;
     ActionExtractWebIDL: TAction;
     ActionFetchAmbientLightAPI: TAction;
     ActionFetchBatteryAPI: TAction;
+    ActionFetchBluetoothAPI: TAction;
     ActionFetchFileAPI: TAction;
     ActionFetchFrom: TAction;
     ActionFetchFromWhatWG: TAction;
@@ -65,6 +82,7 @@ type
     ActionFetchHTMLMediaCaptureAPI: TAction;
     ActionFetchMediaCaptureAndStreamsAPI: TAction;
     ActionFetchMediaStreamRecordingAPI: TAction;
+    ActionFetchMidiAPI: TAction;
     ActionFetchNetworkInformationAPI: TAction;
     ActionFetchNetworkServiceDiscoveryAPI: TAction;
     ActionFetchPageVisibilityAPI: TAction;
@@ -124,32 +142,37 @@ type
     ActionFetchWebSpeechApi: TAction;
     ActionFetchWebWorkersAPI: TAction;
     ActionFetchWidgetInterfaceAPI: TAction;
-    ActionSearchFind: TSearchFind;
-    ActionSearchFindNext: TSearchFindNext;
-    ActionSearchReplace: TSearchReplace;
-    ActionTransformWebIDL: TAction;
-    ActionEditCopy: TEditCopy;
-    ActionEditCut: TEditCut;
-    ActionEditDelete: TEditDelete;
-    ActionEditPaste: TEditPaste;
-    ActionEditSelectAll: TEditSelectAll;
-    ActionEditUndo: TEditUndo;
     ActionFileExit: TFileExit;
     ActionFileOpen: TFileOpen;
     ActionFileSaveAs: TFileSaveAs;
     ActionList: TActionList;
-    ListBoxMessages: TListBox;
+    ActionSearchFind: TSearchFind;
+    ActionSearchFindNext: TSearchFindNext;
+    ActionSearchReplace: TSearchReplace;
+    ActionTransformWebIDL: TAction;
     MainMenu: TMainMenu;
     MenuItemContactsAPI: TMenuItem;
     MenuItemContextAPI: TMenuItem;
     MenuItemDeviceInteractionAPI: TMenuItem;
     MenuItemDiscoveryAPI: TMenuItem;
+    MenuItemEdit: TMenuItem;
+    MenuItemEditCopy: TMenuItem;
+    MenuItemEditCut: TMenuItem;
+    MenuItemEditDelete: TMenuItem;
+    MenuItemEditPaste: TMenuItem;
+    MenuItemEditSelectAll: TMenuItem;
+    MenuItemEditUndo: TMenuItem;
+    MenuItemFetchAmbientLightAPI: TMenuItem;
     MenuItemFetchApp2AppMessagingAPI: TMenuItem;
     MenuItemFetchAppLauncherAPI: TMenuItem;
     MenuItemFetchAppStateSynchronisationAPI: TMenuItem;
     MenuItemFetchAuthenticationAPI: TMenuItem;
+    MenuItemFetchBatteryAPI: TMenuItem;
+    MenuItemFetchBluetoothAPI: TMenuItem;
+    MenuItemFetchFileAPI: TMenuItem;
     MenuItemFetchFrom: TMenuItem;
     MenuItemFetchFromOtherSources: TMenuItem;
+    MenuItemFetchFromW3C: TMenuItem;
     MenuItemFetchFromWAC: TMenuItem;
     MenuItemFetchFromWACAccelerometer: TMenuItem;
     MenuItemFetchFromWACCalender: TMenuItem;
@@ -167,53 +190,43 @@ type
     MenuItemFetchFromWACWebview: TMenuItem;
     MenuItemFetchFromWebCL: TMenuItem;
     MenuItemFetchFromWebinos: TMenuItem;
+    MenuItemFetchfromWhatWG: TMenuItem;
     MenuItemFetchGenericActuatorAPI: TMenuItem;
     MenuItemFetchGenericSensorAPI: TMenuItem;
-    MenuItemFetchMediaContentAPI: TMenuItem;
-    MenuItemFetchMessagingAPI: TMenuItem;
-    MenuItemFetchNavigationAPI: TMenuItem;
-    MenuItemFetchNFCAPI: TMenuItem;
-    MenuItemFetchPaymentAPI: TMenuItem;
-    MenuItemFetchRemoteUIAPI: TMenuItem;
-    MenuItemFetchSecureElementAPI: TMenuItem;
-    MenuItemFetchTVControlAPI: TMenuItem;
-    MenuItemFetchVehicleAPI: TMenuItem;
-    MenuItemFetchWebinosCoreInterface: TMenuItem;
-    MenuItemFetchWebinosWidgetAPI: TMenuItem;
-    MenuItemFetchWebNotificationsAPI: TMenuItem;
-    MenuItemFetchWebRTCAPI: TMenuItem;
-    MenuItemEdit: TMenuItem;
-    MenuItemEditCopy: TMenuItem;
-    MenuItemEditCut: TMenuItem;
-    MenuItemEditDelete: TMenuItem;
-    MenuItemEditPaste: TMenuItem;
-    MenuItemEditSelectAll: TMenuItem;
-    MenuItemEditUndo: TMenuItem;
-    MenuItemFetchAmbientLightAPI: TMenuItem;
-    MenuItemFetchBatteryAPI: TMenuItem;
-    MenuItemFetchFileAPI: TMenuItem;
-    MenuItemFetchFromW3C: TMenuItem;
-    MenuItemFetchfromWhatWG: TMenuItem;
     MenuItemFetchGeolocationAPI: TMenuItem;
     MenuItemFetchHtmlMediaCaptureAPI: TMenuItem;
     MenuItemFetchMediaCaptureAndStreamsAPI: TMenuItem;
+    MenuItemFetchMediaContentAPI: TMenuItem;
+    MenuItemFetchMessagingAPI: TMenuItem;
+    MenuItemFetchMIDIAPI: TMenuItem;
+    MenuItemFetchNavigationAPI: TMenuItem;
     MenuItemFetchNetworkInformationAPI: TMenuItem;
     MenuItemFetchNetworkServiceDiscoveryAPI: TMenuItem;
+    MenuItemFetchNFCAPI: TMenuItem;
     MenuItemFetchPageVisibilityAPI: TMenuItem;
+    MenuItemFetchPaymentAPI: TMenuItem;
     MenuItemFetchPerformanceTimelineAPI: TMenuItem;
     MenuItemFetchPickContactsIntentAPI: TMenuItem;
     MenuItemFetchPickMediaIntendAPI: TMenuItem;
     MenuItemFetchProximityAPI: TMenuItem;
+    MenuItemFetchRemoteUIAPI: TMenuItem;
     MenuItemFetchResourceTimingAPI: TMenuItem;
+    MenuItemFetchSecureElementAPI: TMenuItem;
     MenuItemFetchServerSentEventsAPI: TMenuItem;
     MenuItemFetchStreamRecorderAPI: TMenuItem;
     MenuItemFetchSVG11: TMenuItem;
+    MenuItemFetchTVControlAPI: TMenuItem;
     MenuItemFetchUserTimingsAPI: TMenuItem;
+    MenuItemFetchVehicleAPI: TMenuItem;
     MenuItemFetchVibrationAPI: TMenuItem;
     MenuItemFetchWebAudioAPI: TMenuItem;
     MenuItemFetchWebCryptoKeyDiscovery: TMenuItem;
+    MenuItemFetchWebinosCoreInterface: TMenuItem;
+    MenuItemFetchWebinosWidgetAPI: TMenuItem;
     MenuItemFetchWebIntentsAPI: TMenuItem;
     MenuItemFetchWebKitIDL: TMenuItem;
+    MenuItemFetchWebNotificationsAPI: TMenuItem;
+    MenuItemFetchWebRTCAPI: TMenuItem;
     MenuItemFetchWebSocketAPI: TMenuItem;
     MenuItemFetchWebWorkersAPI: TMenuItem;
     MenuItemFetchWidgetInterface: TMenuItem;
@@ -248,6 +261,7 @@ type
     TabHTML: TTabSheet;
     TabPascalDWS: TTabSheet;
     TabWebIDL: TTabSheet;
+    TreeMessages: TVirtualStringTree;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -255,6 +269,7 @@ type
     procedure ActionExtractWebIDLExecute(Sender: TObject);
     procedure ActionFetchAmbientLightAPIExecute(Sender: TObject);
     procedure ActionFetchBatteryAPIExecute(Sender: TObject);
+    procedure ActionFetchBluetoothAPIExecute(Sender: TObject);
     procedure ActionFetchFileAPIExecute(Sender: TObject);
     procedure ActionFetchFromExecute(Sender: TObject);
     procedure ActionFetchFromWhatWGExecute(Sender: TObject);
@@ -262,6 +277,7 @@ type
     procedure ActionFetchHTMLMediaCaptureAPIExecute(Sender: TObject);
     procedure ActionFetchMediaCaptureAndStreamsAPIExecute(Sender: TObject);
     procedure ActionFetchMediaStreamRecordingAPIExecute(Sender: TObject);
+    procedure ActionFetchMidiAPIExecute(Sender: TObject);
     procedure ActionFetchNetworkInformationAPIExecute(Sender: TObject);
     procedure ActionFetchNetworkServiceDiscoveryAPIExecute(Sender: TObject);
     procedure ActionFetchPageVisibilityAPIExecute(Sender: TObject);
@@ -274,6 +290,20 @@ type
     procedure ActionFetchSVGExecute(Sender: TObject);
     procedure ActionFetchUserTimingsAPIExecute(Sender: TObject);
     procedure ActionFetchVibrationAPIExecute(Sender: TObject);
+    procedure ActionFetchWacAccelerometerExecute(Sender: TObject);
+    procedure ActionFetchWacCalenderExecute(Sender: TObject);
+    procedure ActionFetchWacCameraExecute(Sender: TObject);
+    procedure ActionFetchWacContactsExecute(Sender: TObject);
+    procedure ActionFetchWacCoreExecute(Sender: TObject);
+    procedure ActionFetchWacDeviceIntegrationExecute(Sender: TObject);
+    procedure ActionFetchWacDeviceStatusExecute(Sender: TObject);
+    procedure ActionFetchWacFileSystemExecute(Sender: TObject);
+    procedure ActionFetchWacGeolocationExecute(Sender: TObject);
+    procedure ActionFetchWacMessagingExecute(Sender: TObject);
+    procedure ActionFetchWacOrientationExecute(Sender: TObject);
+    procedure ActionFetchWacTasksExecute(Sender: TObject);
+    procedure ActionFetchWacViewpointFeatureExecute(Sender: TObject);
+    procedure ActionFetchWacWebviewExecute(Sender: TObject);
     procedure ActionFetchWebAudioAPIExecute(Sender: TObject);
     procedure ActionFetchWebCLExecute(Sender: TObject);
     procedure ActionFetchWebCryptoKeyDiscoveryAPIExecute(Sender: TObject);
@@ -311,24 +341,15 @@ type
     procedure ActionFileSaveAsAccept(Sender: TObject);
     procedure ActionFileSaveAsBeforeExecute(Sender: TObject);
     procedure ActionTransformWebIDLExecute(Sender: TObject);
-    procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+    procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+      const Rect: TRect);
     procedure SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
-    procedure SynEditStatusChange(Sender: TObject;
-      Changes: TSynStatusChanges);
-    procedure ActionFetchWacAccelerometerExecute(Sender: TObject);
-    procedure ActionFetchWacCalenderExecute(Sender: TObject);
-    procedure ActionFetchWacCameraExecute(Sender: TObject);
-    procedure ActionFetchWacContactsExecute(Sender: TObject);
-    procedure ActionFetchWacCoreExecute(Sender: TObject);
-    procedure ActionFetchWacDeviceIntegrationExecute(Sender: TObject);
-    procedure ActionFetchWacDeviceStatusExecute(Sender: TObject);
-    procedure ActionFetchWacFileSystemExecute(Sender: TObject);
-    procedure ActionFetchWacGeolocationExecute(Sender: TObject);
-    procedure ActionFetchWacMessagingExecute(Sender: TObject);
-    procedure ActionFetchWacOrientationExecute(Sender: TObject);
-    procedure ActionFetchWacTasksExecute(Sender: TObject);
-    procedure ActionFetchWacViewpointFeatureExecute(Sender: TObject);
-    procedure ActionFetchWacWebviewExecute(Sender: TObject);
+    procedure SynEditStatusChange(Sender: TObject; Changes: TSynStatusChanges);
+    procedure TreeMessagesFreeNode(Sender: TBaseVirtualTree;
+      Node: PVirtualNode);
+    procedure TreeMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure TreeMessagesDblClick(Sender: TObject);
   private
     FTitle: string;
     FProgress: Single;
@@ -658,6 +679,8 @@ begin
   FIniFileName := ChangeFileExt(ParamStr(0), '.ini');
   FProgress := 0;
 
+  TreeMessages.NodeDataSize := SizeOf(TTreeMessage);
+
   FHighlighter := TSynWebIdlSyn.Create(Self);
   SynEditWebIDL.Highlighter := FHighlighter;
 
@@ -732,6 +755,7 @@ begin
       ProcessedTitle := 'Recent';
 
     RecentFile := ExtractFilePath(FIniFileName) + 'APIs\' + ProcessedTitle + '.htm';
+    ForceDirectories(ExtractFileDir(RecentFile));
 
     WriteString('Recent', 'HTML File', RecentFile);
     SynEditHTML.Lines.SaveToFile(RecentFile);
@@ -875,6 +899,11 @@ begin
   FetchFromURL('http://www.w3.org/TR/battery-status/');
 end;
 
+procedure TFormWebIDL.ActionFetchBluetoothAPIExecute(Sender: TObject);
+begin
+  FetchFromURL('https://webbluetoothcg.github.io/web-bluetooth/');
+end;
+
 procedure TFormWebIDL.ActionFetchFromExecute(Sender: TObject);
 var
   URL: string;
@@ -910,6 +939,11 @@ end;
 procedure TFormWebIDL.ActionFetchMediaStreamRecordingAPIExecute(Sender: TObject);
 begin
   FetchFromURL('http://www.w3.org/TR/mediastream-recording/');
+end;
+
+procedure TFormWebIDL.ActionFetchMidiAPIExecute(Sender: TObject);
+begin
+  FetchFromURL('http://www.w3.org/TR/webmidi/');
 end;
 
 procedure TFormWebIDL.ActionFetchNetworkInformationAPIExecute(Sender: TObject);
@@ -1295,9 +1329,12 @@ var
   WebIDL: TdwsWebIDL;
   UnitName: string;
   Index: Integer;
+  Msg: TdwsMessage;
+  Node: PVirtualNode;
+  NodeData: PTreeMessage;
 begin
   SynEditDWS.Clear;
-  ListBoxMessages.Clear;
+  TreeMessages.Clear;
 
   UnitName := Trim(FTitle);
   Index := 1;
@@ -1333,19 +1370,35 @@ begin
       OutputDebugString(PWideChar(Interpreter.Msgs.AsInfo));
 
       for Index := 0 to Interpreter.Msgs.Count - 1 do
-        ListBoxMessages.Items.Add(Interpreter.Msgs.Msgs[Index].AsInfo);
+      begin
+        Msg := Interpreter.Msgs.Msgs[Index];
+        Node := TreeMessages.AddChild(TreeMessages.RootNode);
+        NodeData := TreeMessages.GetNodeData(Node);
+        NodeData^.Text := Msg.AsInfo;
+        if Msg is TScriptMessage then
+        begin
+          NodeData^.Col := TScriptMessage(Msg).ScriptPos.Col;
+          NodeData^.Line := TScriptMessage(Msg).ScriptPos.Line;
+        end
+        else
+        begin
+          NodeData^.Line := -1;
+          NodeData^.Col := 0;
+        end;
+      end;
 
       TabWebIDL.Show;
       SynEditWebIDL.SetFocus;
 
-      for Index := 0 to Interpreter.Msgs.Count - 1 do
+      for Index := Interpreter.Msgs.Count - 1 downto 0 do
         if Interpreter.Msgs.Msgs[Index] is TErrorMessage then
         begin
           SynEditWebIDL.GotoLineAndCenter(TErrorMessage(Interpreter.Msgs.Msgs[Index]).Line);
           SynEditWebIDL.CaretX := TErrorMessage(Interpreter.Msgs.Msgs[Index]).Col;
+          Break;
         end;
 
-      ListBoxMessages.Visible := True;
+      TreeMessages.Visible := True;
       SplitterMessages.Visible := True;
     end;
 
@@ -1401,6 +1454,43 @@ begin
     StatusBar.Panels[0].Text :=
       'X: ' + IntToStr(TSynEdit(Sender).CaretX) + ' ' +
       'Y: ' + IntToStr(TSynEdit(Sender).CaretY);
+end;
+
+procedure TFormWebIDL.TreeMessagesDblClick(Sender: TObject);
+var
+  NodeData: PTreeMessage;
+begin
+  Assert(Sender is TBaseVirtualTree);
+  if not Assigned(TBaseVirtualTree(Sender).FocusedNode) then
+    Exit;
+
+  NodeData := TBaseVirtualTree(Sender).GetNodeData(TBaseVirtualTree(Sender).FocusedNode);
+
+  if NodeData^.Line >= 0 then
+  begin
+    SynEditWebIDL.GotoLineAndCenter(NodeData.Line);
+    SynEditWebIDL.CaretX := NodeData.Col;
+    SynEditWebIDL.SetFocus;
+  end;
+end;
+
+procedure TFormWebIDL.TreeMessagesFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  NodeData: PTreeMessage;
+begin
+  NodeData := Sender.GetNodeData(Node);
+  Finalize(NodeData^);
+end;
+
+procedure TFormWebIDL.TreeMessagesGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: string);
+var
+  NodeData: PTreeMessage;
+begin
+  NodeData := Sender.GetNodeData(Node);
+  CellText := NodeData^.Text;
 end;
 
 procedure TFormWebIDL.SynEditGutterPaint(Sender: TObject; aLine, X,

@@ -141,15 +141,26 @@ object FormWebIDL: TFormWebIDL
       end
     end
   end
-  object ListBoxMessages: TListBox
+  object TreeMessages: TVirtualStringTree
     Left = 0
     Top = 650
     Width = 1000
     Height = 97
     Align = alBottom
-    ItemHeight = 13
+    Header.AutoSizeIndex = 0
+    Header.Font.Charset = DEFAULT_CHARSET
+    Header.Font.Color = clWindowText
+    Header.Font.Height = -11
+    Header.Font.Name = 'Tahoma'
+    Header.Font.Style = []
+    Header.MainColumn = -1
     TabOrder = 2
+    TreeOptions.PaintOptions = [toShowButtons, toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
     Visible = False
+    OnDblClick = TreeMessagesDblClick
+    OnFreeNode = TreeMessagesFreeNode
+    OnGetText = TreeMessagesGetText
+    Columns = <>
   end
   object MainMenu: TMainMenu
     Left = 120
@@ -179,6 +190,9 @@ object FormWebIDL: TFormWebIDL
         object MenuItemFetchBatteryAPI: TMenuItem
           Action = ActionFetchBatteryAPI
         end
+        object MenuItemFetchBluetoothAPI: TMenuItem
+          Action = ActionFetchBluetoothAPI
+        end
         object MenuItemFetchGeolocationAPI: TMenuItem
           Action = ActionFetchGeolocationAPI
         end
@@ -193,6 +207,9 @@ object FormWebIDL: TFormWebIDL
         end
         object MenuItemFetchStreamRecorderAPI: TMenuItem
           Action = ActionFetchMediaStreamRecordingAPI
+        end
+        object MenuItemFetchMIDIAPI: TMenuItem
+          Action = ActionFetchMidiAPI
         end
         object MenuItemFetchNetworkInformationAPI: TMenuItem
           Action = ActionFetchNetworkInformationAPI
@@ -473,15 +490,26 @@ object FormWebIDL: TFormWebIDL
       Caption = 'Battery API'
       OnExecute = ActionFetchBatteryAPIExecute
     end
-    object ActionFetchFileAPI: TAction
+    object ActionFetchBluetoothAPI: TAction
       Category = 'Fetch'
-      Caption = 'File API'
-      OnExecute = ActionFetchFileAPIExecute
+      Caption = 'Bluetooth API'
+      OnExecute = ActionFetchBluetoothAPIExecute
+    end
+    object ActionFetchFrom: TAction
+      Category = 'Fetch'
+      Caption = 'Fetch from...'
+      ShortCut = 122
+      OnExecute = ActionFetchFromExecute
     end
     object ActionFetchGeolocationAPI: TAction
       Category = 'Fetch'
       Caption = 'Geolocation API'
       OnExecute = ActionFetchGeolocationAPIExecute
+    end
+    object ActionFetchFileAPI: TAction
+      Category = 'Fetch'
+      Caption = 'File API'
+      OnExecute = ActionFetchFileAPIExecute
     end
     object ActionFetchHTMLMediaCaptureAPI: TAction
       Category = 'Fetch'
@@ -497,6 +525,11 @@ object FormWebIDL: TFormWebIDL
       Category = 'Fetch'
       Caption = 'Media Stream Recording API'
       OnExecute = ActionFetchMediaStreamRecordingAPIExecute
+    end
+    object ActionFetchMidiAPI: TAction
+      Category = 'Fetch'
+      Caption = 'MIDI API'
+      OnExecute = ActionFetchMidiAPIExecute
     end
     object ActionFetchNetworkInformationAPI: TAction
       Category = 'Fetch'
@@ -796,12 +829,6 @@ object FormWebIDL: TFormWebIDL
       Category = 'Fetch'
       Caption = 'Fetch from Web&CL'
       OnExecute = ActionFetchWebCLExecute
-    end
-    object ActionFetchFrom: TAction
-      Category = 'Fetch'
-      Caption = 'Fetch from...'
-      ShortCut = 122
-      OnExecute = ActionFetchFromExecute
     end
     object ActionFetchWacAccelerometer: TAction
       Category = 'Fetch'
