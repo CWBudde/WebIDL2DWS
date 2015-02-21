@@ -24,7 +24,7 @@ uses
   dwsTokenizer, dwsErrors, dwsWebIDL, dwsWebIDLTokenizer,
 
   (* Custom *)
-  WebIDL2DWS.SpecifyURL;
+  WebIDL2DWS.SpecifyURL, VirtualTrees, Vcl.ImgList;
 
 type
   TArrayOfString = array of string;
@@ -61,6 +61,7 @@ type
   TTreeMessage = record
     Text: string;
     Line, Col: Integer;
+    ImageIndex: Integer;
   end;
   PTreeMessage = ^TTreeMessage;
 
@@ -262,6 +263,7 @@ type
     TabPascalDWS: TTabSheet;
     TabWebIDL: TTabSheet;
     TreeMessages: TVirtualStringTree;
+    ImageList: TImageList;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -350,6 +352,9 @@ type
     procedure TreeMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure TreeMessagesDblClick(Sender: TObject);
+    procedure TreeMessagesGetImageIndex(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+      var Ghosted: Boolean; var ImageIndex: Integer);
   private
     FTitle: string;
     FProgress: Single;
@@ -1385,6 +1390,15 @@ begin
           NodeData^.Line := -1;
           NodeData^.Col := 0;
         end;
+
+        if Msg is TErrorMessage then
+          NodeData^.ImageIndex := 0
+        else if Msg is TWarningMessage then
+          NodeData^.ImageIndex := 1
+        else if Msg is TInfoMessage then
+          NodeData^.ImageIndex := 2
+        else if Msg is TErrorMessage then
+          NodeData^.ImageIndex := -1;
       end;
 
       TabWebIDL.Show;
@@ -1481,6 +1495,16 @@ var
 begin
   NodeData := Sender.GetNodeData(Node);
   Finalize(NodeData^);
+end;
+
+procedure TFormWebIDL.TreeMessagesGetImageIndex(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+  var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  NodeData: PTreeMessage;
+begin
+  NodeData := Sender.GetNodeData(Node);
+  ImageIndex := NodeData^.ImageIndex;
 end;
 
 procedure TFormWebIDL.TreeMessagesGetText(Sender: TBaseVirtualTree;
