@@ -5,9 +5,10 @@ interface
 uses
   (* Delphi *)
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ActnList, Vcl.StdActns, Vcl.Menus, Vcl.ComCtrls, Vcl.StdCtrls, 
-  Vcl.ExtCtrls,
+  System.Classes, {$if CompilerVersion >= 24} System.Actions, {$ifend}
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ActnList,
+  Vcl.StdActns, Vcl.Menus, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
+  Vcl.ImgList,
 
   (* SynEdit *)
   SynEdit, SynEditSearch, SynEditMiscClasses, SynEditPlugins, SynMacroRecorder,
@@ -17,14 +18,14 @@ uses
   (* Indy *)
   IdComponent,
 
-  (* Virtual TreeView
+  (* Virtual TreeView *)
   VirtualTrees,
 
   (* DWS *)
   dwsTokenizer, dwsErrors, dwsWebIDL, dwsWebIDLTokenizer,
 
   (* Custom *)
-  WebIDL2DWS.SpecifyURL, VirtualTrees, Vcl.ImgList;
+  WebIDL2DWS.SpecifyURL;
 
 type
   TArrayOfString = array of string;
@@ -151,6 +152,7 @@ type
     ActionSearchFindNext: TSearchFindNext;
     ActionSearchReplace: TSearchReplace;
     ActionTransformWebIDL: TAction;
+    ImageList: TImageList;
     MainMenu: TMainMenu;
     MenuItemContactsAPI: TMenuItem;
     MenuItemContextAPI: TMenuItem;
@@ -263,7 +265,6 @@ type
     TabPascalDWS: TTabSheet;
     TabWebIDL: TTabSheet;
     TreeMessages: TVirtualStringTree;
-    ImageList: TImageList;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);

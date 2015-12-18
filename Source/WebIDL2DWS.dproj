@@ -3,11 +3,11 @@
 			<ProjectGuid>{9F7FCA6B-8861-4FAD-9BD5-6A520C8A3D0B}</ProjectGuid>
 			<MainSource>WebIDL2DWS.dpr</MainSource>
 			<Base>True</Base>
-			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Config Condition="'$(Config)'==''">Release</Config>
 			<TargetedPlatforms>1</TargetedPlatforms>
 			<AppType>Application</AppType>
 			<FrameworkType>VCL</FrameworkType>
-			<ProjectVersion>13.4</ProjectVersion>
+			<ProjectVersion>16.1</ProjectVersion>
 			<Platform Condition="'$(Platform)'==''">Win32</Platform>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -23,6 +23,12 @@
 			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+			<Cfg_1_Win32>true</Cfg_1_Win32>
+			<CfgParent>Cfg_1</CfgParent>
+			<Cfg_1>true</Cfg_1>
+			<Base>true</Base>
+		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
 			<Cfg_2>true</Cfg_2>
 			<CfgParent>Base</CfgParent>
@@ -35,6 +41,7 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
+			<SanitizedProjectName>WebIDL2DWS</SanitizedProjectName>
 			<Manifest_File>None</Manifest_File>
 			<DCC_ExeOutput>..\Binaries</DCC_ExeOutput>
 			<DCC_DcuOutput>..\DCU</DCC_DcuOutput>
@@ -52,14 +59,19 @@
 			<VerInfo_Locale>1033</VerInfo_Locale>
 			<VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
 			<Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
 			<DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1)'!=''">
 			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-			<DCC_DebugInformation>false</DCC_DebugInformation>
+			<DCC_DebugInformation>0</DCC_DebugInformation>
 			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
 			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+			<VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+			<Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+			<VerInfo_Locale>1033</VerInfo_Locale>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
@@ -133,8 +145,7 @@
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
 					<Excluded_Packages>
-						<Excluded_Packages Name="C:\Users\Public\Code\LKSL\Bin\Win32\Debug\LKSL160.bpl">Datei C:\Users\Public\Code\LKSL\Bin\Win32\Debug\LKSL160.bpl nicht gefunden</Excluded_Packages>
-						<Excluded_Packages Name="C:\Users\Public\Code\Lua4Delphi\BPL\Win32\Debug\Lua4Delphi160.bpl">Lua4Delphi for Delphi XE2</Excluded_Packages>
+						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\MetaGraphics_D16.bpl">Meta Graphics</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dcldxCoreRS16.bpl">ExpressCoreLibrary by Developer Express Inc.</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dclcxLibraryRS16.bpl">Express Cross Platform Library by Developer Express Inc.</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dclcxEditorsRS16.bpl">ExpressEditors Library by Developer Express Inc.</Excluded_Packages>
@@ -248,7 +259,6 @@
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dcldxPScxExtCommonRS16.bpl">ExpressPrinting System Extended Cross Platform Library by Developer Express Inc.</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dcldxPScxCommonRS16.bpl">ExpressPrinting System Cross Platform Library by Developer Express Inc.</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dcldxPSPrVwAdvRS16.bpl">ExpressPrinting System Advanced Preview Window by Developer Express Inc.</Excluded_Packages>
-						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\Html5Canvas_RSXE2.bpl">Native HTML5 Canvas</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\VirtualShellToolsD16D.bpl">Virtual Shell Tools Designtime Package</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\VppmDesignTime_RSXE2.bpl">VST Plug-in Preset Match (design time)</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\GLSS_BASSXE2.bpl">GLScene - BASS Manager</Excluded_Packages>
@@ -256,14 +266,12 @@
 						<Excluded_Packages Name="C:\Program Files (x86)\RemObjects Software\RemObjects SDK for Delphi\Dcu\D16\win32\RemObjects_IDE_D16.bpl">RemObjects SDK - IDE Integration for Win32</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\RemObjects Software\RemObjects SDK for Delphi\Dcu\D16\win32\RemObjects_WebBroker_D16.bpl">RemObjects SDK - WebBroker Library</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\RemObjects Software\RemObjects SDK for Delphi\Dcu\D16\win32\RemObjects_Indy_D16.bpl">RemObjects SDK - Indy Library</Excluded_Packages>
-						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\customcontrol.bpl">Custom Control</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\9.0\Bpl\iOSComps.bpl">Components for iOS</Excluded_Packages>
 						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k160.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automatisierungsserver</Excluded_Packages>
 						<Excluded_Packages Name="$(BDSBIN)\dclofficexp160.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\Developer Express.VCL\Library\RS16\dclcxPivotGridOLAPRS16.bpl">ExpressPivotGrid 2 OLAP by Developer Express Inc.</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Code\RiverSoftAVG\bin\Win32\D160\RSChartsDclD160.bpl">RiverSoftAVG Charting Component Suite (Design-Time)</Excluded_Packages>
 						<Excluded_Packages Name="C:\Users\Public\Code\RiverSoftAVG\bin\Win32\D160\RSFmxChartsDclD160.bpl">RiverSoftAVG Charting Component Suite (Design-Time) (FMX)</Excluded_Packages>
-						<Excluded_Packages Name="C:\Users\Public\Code\ImagingLib\code\Bin\VampyreImagingPackage.XE2.bpl.16">Datei C:\Users\Public\Code\ImagingLib\code\Bin\VampyreImagingPackage.XE2.bpl.16 nicht gefunden</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\FastReport 5\LibD16\dclfsibx16.bpl">FastScript 1.9 IBX Components</Excluded_Packages>
 						<Excluded_Packages Name="C:\Program Files (x86)\FastReports\FastReport 5\LibD16\dclfrxibx16.bpl">FastReport 5.0 IBX Components</Excluded_Packages>
 					</Excluded_Packages>

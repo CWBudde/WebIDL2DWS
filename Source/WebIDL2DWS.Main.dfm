@@ -78,7 +78,6 @@ object FormWebIDL: TFormWebIDL
         Gutter.Font.Style = []
         Gutter.LeftOffset = 0
         Highlighter = SynHTMLSyn
-        ReadOnly = True
         SearchEngine = SynEditSearch
         OnGutterPaint = SynEditGutterPaint
         OnStatusChange = SynEditStatusChange
